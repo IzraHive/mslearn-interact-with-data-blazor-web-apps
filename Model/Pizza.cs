@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 
 namespace BlazingPizza
 {
@@ -16,27 +16,36 @@ namespace BlazingPizza
 
         public int OrderId { get; set; }
 
-        public PizzaSpecial Special { get; set; }
+        public PizzaSpecial Special { get; set; } = new PizzaSpecial();
 
         public int SpecialId { get; set; }
 
-        public int Size { get; set; }
+        public int Size { get; set; } = DefaultSize;
 
-        public List<PizzaTopping> Toppings { get; set; }
+        public List<PizzaTopping> Toppings { get; set; } = new List<PizzaTopping>();
 
+        /// <summary>
+        /// Calculates the base price based on pizza size.
+        /// </summary>
         public decimal GetBasePrice()
         {
-            return ((decimal)Size / (decimal)DefaultSize) * Special.BasePrice;
+            return ((decimal)Size / DefaultSize) * Special.BasePrice;
         }
 
+        /// <summary>
+        /// Calculates total price including toppings (if added later).
+        /// </summary>
         public decimal GetTotalPrice()
         {
-            return GetBasePrice();
+            return GetBasePrice(); // Add toppings cost here if needed
         }
 
+        /// <summary>
+        /// Returns the total price formatted in Jamaican Dollars (J$) with no decimals.
+        /// </summary>
         public string GetFormattedTotalPrice()
         {
-            return GetTotalPrice().ToString("0.00");
+            return GetTotalPrice().ToString("C0", CultureInfo.CurrentCulture);
         }
     }
 }
